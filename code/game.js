@@ -2,7 +2,9 @@
 var actorChars = {
   "@": Player,
   "o": Coin, // A coin will wobble up and down
-  "=": Lava, "|": Lava, "v": Lava  
+  "p": Penny,
+  "=": Lava, "|": Lava, "v": Lava,
+  "t": Treasure
 };
 
 function Level(plan) {
@@ -88,6 +90,20 @@ function Coin(pos) {
   this.wobble = Math.random() * Math.PI * 2;
 }
 Coin.prototype.type = "coin";
+
+function Penny(pos) {
+  this.basePos = this.pos = pos.plus(new Vector(0.2, 0.1));
+  this.size = new Vector(0.6, 0.6);
+  this.wobble = Math.random() * Math.PI * 2;
+}
+Penny.prototype.type = "penny";
+
+function Treasure(pos) {
+	this.basePos = this.pos = pos.plus(new Vector(0.6, 0.3));
+	this.size = new Vector(0.9, 0.8);
+	this.wobble = Math.random() * Math.PI * 2;
+}
+Treasure.prototype.type = "treasure";
 
 // Lava is initialized based on the character, but otherwise has a
 // size and position
@@ -294,19 +310,18 @@ Coin.prototype.act = function(step) {
   this.pos = this.basePos.plus(new Vector(0, wobblePos));
 };
 
-var maxStep = 0.05;
-
-var wobbleSpeed = 8, wobbleDist = 0.07;
-
-Coin.prototype.act = function(step) {
+Penny.prototype.act = function(step) {
+  this.wobble += step * wobbleSpeed;
+  var wobblePos = Math.sin(this.wobble) * wobbleDist;
+  this.pos = this.basePos.plus(new Vector(0, wobblePos));
+};
+Treasure.prototype.act = function(step) {
   this.wobble += step * wobbleSpeed;
   var wobblePos = Math.sin(this.wobble) * wobbleDist;
   this.pos = this.basePos.plus(new Vector(0, wobblePos));
 };
 
-var maxStep = 0.05;
-
-var playerXSpeed = 7;
+var playerXSpeed = 9;
 
 Player.prototype.moveX = function(step, level, keys) {
   this.speed.x = 0;
@@ -326,8 +341,8 @@ Player.prototype.moveX = function(step, level, keys) {
     this.pos = newPos;
 };
 
-var gravity = 30;
-var jumpSpeed = 17;
+var gravity = 20;
+var jumpSpeed = 25;
 
 Player.prototype.moveY = function(step, level, keys) {
   // Accelerate player downward (always)
@@ -365,22 +380,32 @@ Player.prototype.act = function(step, level, keys) {
 
 Level.prototype.playerTouched = function(type, actor) {
 
-  // if the player touches lava and the player hasn't won
+   // if the player touches lava and the player hasn't won
   // Player loses
   if (type == "lava" && this.status == null) {
     this.status = "lost";
     this.finishDelay = 1;
-  } else if (type == "coin") {
+  } else if (type == "treasure") {
     this.actors = this.actors.filter(function(other) {
       return other != actor;
     });
     // If there aren't any coins left, player wins
     if (!this.actors.some(function(actor) {
-           return actor.type == "coin";
+           return actor.type == "treasure";
          })) {
       this.status = "won";
       this.finishDelay = 1;
     }
+  }
+  else if (type == "coin") {
+	  this.actors = this.actors.filter(function(other) {
+		  return other != actor;
+	  });
+  }
+  else if (type == "penny") {
+    this.actors = this.actors.filter(function(other) {
+      return other != actor;
+    });
   }
 };
 
