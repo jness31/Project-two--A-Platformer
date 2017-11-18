@@ -7,7 +7,7 @@
 
 .actor  { position: absolute;  }
 .coin   { background: rgb(241, 229, 89); }
-.player { background: rgb(64, 64, 64); }
+.player { background-image: url("http://static.pokemonpets.com/images/monsters-images-800-800/25-Pikachu.png"); 
 .penny  { background: rgb(205, 132, 86);}
 .treasure { background: rgb(142, 115, 5);}
 
