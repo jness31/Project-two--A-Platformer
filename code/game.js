@@ -405,6 +405,8 @@ Level.prototype.playerTouched = function(type, actor) {
   else if (type == "penny") {
     this.actors = this.actors.filter(function(other) {
       return other != actor;
+	});
+}
 	 
   else if (type == "boost") {
 	  this.actors = this.actors.filter(function(other) {
