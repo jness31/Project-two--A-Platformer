@@ -405,7 +405,23 @@ Level.prototype.playerTouched = function(type, actor) {
   else if (type == "penny") {
     this.actors = this.actors.filter(function(other) {
       return other != actor;
+	 
+  else if (type == "boost") {
+	  this.actors = this.actors.filter(function(other) {
+		  return other != actor;
     });
+    var myVar = setInterval(myTimer, 30);
+    var countdown = 0;
+    function myTimer() {
+      jumpspeed = 24;
+      playerXSpeed = 14;
+      if(countdown>300) {
+	clearInterval(myVar);
+	jumpspeed = 18;
+	playerXSpeed = 8;
+      }
+      countdown++;
+    }
   }
 };
 
