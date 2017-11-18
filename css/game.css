@@ -1,4 +1,4 @@
-.background    { background: url(https://cdn.pixabay.com/photo/2012/04/26/18/41/banana-42793_960_720.png);
+.background    { background-image: url("https://cdn.pixabay.com/photo/2012/04/26/18/41/banana-42793_960_720.png");
                  table-layout: fixed;
                  border-spacing: 0;   }
 .background td { padding: 0;          }
